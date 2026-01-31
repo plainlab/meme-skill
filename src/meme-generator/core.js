@@ -39,9 +39,19 @@ const searchTemplate = (templates, query) => {
   };
 
   const fuse = new Fuse(templates, options);
-  const result = fuse.search(query);
+  const results = fuse.search(query);
 
-  return result.length > 0 ? result[0].item : null;
+  if (results.length === 0) return null;
+
+  // Sort by match length (prefer longer matches)
+  // For example, prefer "captain-america" over "captain"
+  const sortedByLength = results.sort((a, b) => {
+    const aLength = a.item.id ? a.item.id.length : 0;
+    const bLength = b.item.id ? b.item.id.length : 0;
+    return bLength - aLength; // Descending order (longest first)
+  });
+
+  return sortedByLength[0].item;
 };
 
 /**

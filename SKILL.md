@@ -27,7 +27,7 @@ node index.js "<prompt>" "<text1>" "<text2>" "<text3>" ...
 node index.js "doge" "Much skill" "Very wow"
 
 # 3 text positions (e.g., Captain America)
-node index.js "captain" "Look at me" "I am the captain" "now"
+node index.js "captain-america" "Look at me" "I am the captain" "now"
 
 # 5 text positions (e.g., Elmo choosing cocaine)
 node index.js "elmo" "option 1" "option 2" "option 3" "option 4" "option 5"
@@ -61,7 +61,7 @@ node index.js "success" "Tài đức" "Vẹn toàn"
 - `stonks` - Meme man with stock gains
 
 ### 3 Lines
-- `captain` - Captain America Elevator Fight Dad Joke
+- `captain-america` - Captain America Elevator Fight Dad Joke
 - `distracted-boyfriend` - Distracted Boyfriend (choice vs temptation)
 - `ds` - Daily Struggle
 
