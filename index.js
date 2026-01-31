@@ -5,20 +5,20 @@ const { sendToSlack } = require('./src/notification/slack');
 /**
  * Main Skill Function: Generates a meme and optionally sends it to a channel.
  * @param {string} prompt - The meme template keyword (e.g., "doge").
- * @param {string} topText - Top caption.
- * @param {string} bottomText - Bottom caption.
+ * @param {string[]} texts - Array of text lines.
  * @param {boolean} sendToChannel - Whether to send to the configured Slack channel.
  * @returns {Promise<{url: string, sent: boolean}>}
  */
-const executeSkill = async (prompt, topText, bottomText, sendToChannel = false) => {
+const executeSkill = async (prompt, texts = [], sendToChannel = false) => {
   try {
-    console.log(`[MemeSkill] Generating for: "${prompt}"...`);
-    const memeUrl = await generateMemeUrl(prompt, topText, bottomText);
+    console.log(`[MemeSkill] Generating for: "${prompt}" with texts: [${texts.join(', ')}]...`);
+    // Pass individual text arguments to generateMemeUrl
+    const memeUrl = await generateMemeUrl(prompt, ...texts);
     
     let sent = false;
     if (sendToChannel) {
       console.log('[MemeSkill] Sending to Slack...');
-      sent = await sendToSlack(`Meme: ${prompt} [${topText}/${bottomText}]`, memeUrl);
+      sent = await sendToSlack(`Meme: ${prompt} [${texts.join('/')}]`, memeUrl);
     }
 
     return { url: memeUrl, sent };
@@ -32,12 +32,19 @@ const executeSkill = async (prompt, topText, bottomText, sendToChannel = false) 
 if (require.main === module) {
   const args = process.argv.slice(2);
   if (args.length > 0) {
-    const [prompt, top, bottom] = args;
-    executeSkill(prompt, top || '_', bottom || '_', true)
+    // First arg is prompt
+    const prompt = args[0];
+    // All subsequent args are texts
+    const texts = args.slice(1);
+    
+    // If no texts provided, default to empty placeholders
+    const finalTexts = texts.length > 0 ? texts : ['_', '_'];
+
+    executeSkill(prompt, finalTexts, true)
       .then(res => console.log('Result:', res))
       .catch(err => process.exit(1));
   } else {
-    console.log('Usage: node index.js <prompt> <topText> <bottomText>');
+    console.log('Usage: node index.js <prompt> <text1> [text2] [text3] ...');
   }
 }
 

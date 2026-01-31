@@ -5,11 +5,10 @@ const { fetchTemplates, searchTemplate, getRandomTemplate, buildUrl } = require(
  * Falls back to a random template if the prompt matches nothing.
  * 
  * @param {string} searchPrompt - The "intent" or keyword (e.g., "smart guy").
- * @param {string} topText - Top caption.
- * @param {string} bottomText - Bottom caption.
+ * @param {...string} texts - Variable text lines (top, middle, bottom, etc.).
  * @returns {Promise<string>} - The meme image URL.
  */
-const generateMemeUrl = async (searchPrompt, topText, bottomText) => {
+const generateMemeUrl = async (searchPrompt, ...texts) => {
   const templates = await fetchTemplates();
   
   if (templates.length === 0) {
@@ -24,7 +23,7 @@ const generateMemeUrl = async (searchPrompt, topText, bottomText) => {
     template = getRandomTemplate(templates);
   }
 
-  return buildUrl(template.id, topText, bottomText);
+  return buildUrl(template.id, ...texts);
 };
 
 module.exports = {

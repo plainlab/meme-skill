@@ -29,11 +29,14 @@ SLACK_HOOK_URL=https://hooks.slack.com/services/YOUR/HOOK/URL
 ## Usage
 
 ### CLI
-Run directly from the terminal:
+Run directly from the terminal with any number of text lines:
 
 ```bash
-# Basic
+# Basic (2 lines)
 node index.js "doge" "Much Skill" "Very Wow"
+
+# Captain Meme (3 lines)
+node index.js "captain" "Look at me" "I am the captain" "now"
 
 # Unicode
 node index.js "success" "Tài đức" "Vẹn toàn"
@@ -44,11 +47,11 @@ node index.js "success" "Tài đức" "Vẹn toàn"
 const { executeSkill } = require('./index');
 
 // Generate and get URL only
-const result = await executeSkill('cat', 'I can has', 'cheezburger', false);
+const result = await executeSkill('captain', ['Look at me', 'I am the captain', 'now'], false);
 console.log(result.url);
 
 // Generate and Send to Slack
-await executeSkill('cat', 'I can has', 'cheezburger', true);
+await executeSkill('doge', ['Much code', 'Very works'], true);
 ```
 
 ## AI Agent Integration (OpenClaw)

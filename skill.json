@@ -1,20 +1,19 @@
 {
   "name": "generate_meme",
-  "description": "Generate a meme image based on a search prompt and captions. Can optionally send to Slack.",
+  "description": "Generate a meme image based on a search prompt and variable number of text lines (top, middle, bottom, etc.). Can optionally send to Slack.",
   "parameters": {
     "type": "object",
     "properties": {
       "prompt": {
         "type": "string",
-        "description": "Keyword to find a meme template (e.g., 'doge', 'cat', 'coding')."
+        "description": "Keyword to find a meme template (e.g., 'doge', 'captain', 'coding')."
       },
-      "topText": {
-        "type": "string",
-        "description": "Text to appear at the top of the meme."
-      },
-      "bottomText": {
-        "type": "string",
-        "description": "Text to appear at the bottom of the meme."
+      "texts": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Array of text lines to place on the meme. Order matters (Top -> Bottom). For Captain meme, use 3 lines."
       },
       "sendToSlack": {
         "type": "boolean",
@@ -22,6 +21,6 @@
         "default": true
       }
     },
-    "required": ["prompt", "topText", "bottomText"]
+    "required": ["prompt", "texts"]
   }
 }

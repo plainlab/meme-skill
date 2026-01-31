@@ -57,10 +57,9 @@ const getRandomTemplate = (templates) => {
 /**
  * Build the Meme URL
  * @param {string} templateId 
- * @param {string} topText 
- * @param {string} bottomText 
+ * @param {...string} texts - Variable number of text lines
  */
-const buildUrl = (templateId, topText = '_', bottomText = '_') => {
+const buildUrl = (templateId, ...texts) => {
   const normalize = (text) => {
     return (text || '_')
       .replace(/ /g, '_')
@@ -72,8 +71,16 @@ const buildUrl = (templateId, topText = '_', bottomText = '_') => {
       .replace(/\\/g, '~b');
   };
 
-  const path = `${normalize(topText)}/${normalize(bottomText)}`;
-  return `${BASE_URL}/images/${templateId}/${encodeURI(path)}.jpg?font=notosans`;
+  // If no texts provided, default to at least one empty line to ensure valid URL structure if needed, 
+  // but memegen often works with just template ID. However, usually we want at least placeholders.
+  // Let's filter out undefined/null but keep empty strings if passed explicitly, 
+  // or just map everything.
+  
+  const textPath = texts.length > 0 
+    ? texts.map(t => normalize(t)).join('/') 
+    : '_/_'; // Default to top/bottom empty
+
+  return `${BASE_URL}/images/${templateId}/${encodeURI(textPath)}.jpg?font=notosans`;
 };
 
 module.exports = {
