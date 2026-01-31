@@ -32,23 +32,41 @@ SLACK_HOOK_URL=https://hooks.slack.com/services/YOUR/HOOK/URL
 Run directly from the terminal with any number of text lines:
 
 ```bash
-# Basic (2 lines)
+# 2 lines (classic)
 node index.js "doge" "Much Skill" "Very Wow"
 
-# Captain Meme (3 lines)
+# 3 lines (Captain America)
 node index.js "captain" "Look at me" "I am the captain" "now"
 
-# Unicode
+# 5 lines (Elmo choosing cocaine)
+node index.js "elmo" "option 1" "option 2" "option 3" "option 4" "option 5"
+
+# 6 lines (American Chopper Argument)
+node index.js "chair" "point 1" "point 2" "point 3" "point 4" "point 5" "point 6"
+
+# Unicode support
 node index.js "success" "Tài đức" "Vẹn toàn"
+```
+
+### Wrapper Script
+Use the simplified pipe syntax:
+
+```bash
+./meme.sh "drake | not using memes | using memes"
+./meme.sh "elmo | option 1 | option 2 | option 3 | option 4 | option 5"
 ```
 
 ### Programmatic
 ```javascript
 const { executeSkill } = require('./index');
 
-// Generate and get URL only
-const result = await executeSkill('captain', ['Look at me', 'I am the captain', 'now'], false);
+// Generate with 2 texts
+const result = await executeSkill('doge', ['Much Skill', 'Very Wow'], false);
 console.log(result.url);
+
+// Generate with 5 texts
+const result2 = await executeSkill('elmo', ['option 1', 'option 2', 'option 3', 'option 4', 'option 5'], false);
+console.log(result2.url);
 
 // Generate and Send to Slack
 await executeSkill('doge', ['Much code', 'Very works'], true);
