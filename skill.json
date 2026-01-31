@@ -1,0 +1,27 @@
+{
+  "name": "generate_meme",
+  "description": "Generate a meme image based on a search prompt and captions. Can optionally send to Slack.",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "prompt": {
+        "type": "string",
+        "description": "Keyword to find a meme template (e.g., 'doge', 'cat', 'coding')."
+      },
+      "topText": {
+        "type": "string",
+        "description": "Text to appear at the top of the meme."
+      },
+      "bottomText": {
+        "type": "string",
+        "description": "Text to appear at the bottom of the meme."
+      },
+      "sendToSlack": {
+        "type": "boolean",
+        "description": "Whether to send the generated meme to the configured Slack channel.",
+        "default": true
+      }
+    },
+    "required": ["prompt", "topText", "bottomText"]
+  }
+}
