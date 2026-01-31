@@ -53,9 +53,20 @@ await executeSkill('cat', 'I can has', 'cheezburger', true);
 
 ## AI Agent Integration (OpenClaw)
 
-To register this skill with an AI agent, use the following tool definition:
+### 1. Install Skill
+Clone this repository into your OpenClaw skills directory or configure it as a remote skill:
 
-### Tool Definition (`skill.json`)
+- **Repository**: `https://github.com/plainlab/meme-skill`
+
+```bash
+git clone https://github.com/plainlab/meme-skill
+cd meme-skill
+npm install
+```
+
+### 2. Tool Definition (`skill.json`)
+
+To register this skill with an AI agent, use the definition found in [`skill.json`](./skill.json):
 
 ```json
 {
