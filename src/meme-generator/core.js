@@ -1,6 +1,9 @@
 const fetch = require('node-fetch');
 const NodeCache = require('node-cache');
 const Fuse = require('fuse.js');
+const fs = require('fs');
+const path = require('path');
+const os = require('os');
 
 const BASE_URL = process.env.MEMEGEN_URI || 'https://api.memegen.link';
 const cache = new NodeCache({ stdTTL: 3600 }); // Cache for 1 hour
@@ -93,9 +96,40 @@ const buildUrl = (templateId, ...texts) => {
   return `${BASE_URL}/images/${templateId}/${encodeURI(textPath)}.jpg?font=notosans`;
 };
 
+/**
+ * Download the generated meme image to a temporary file
+ * @param {string} url - The meme image URL
+ * @returns {Promise<string>} - Local file path
+ */
+const downloadMeme = async (url) => {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Failed to download meme: ${response.statusText}`);
+  }
+
+  // Create a temp directory for memes if it doesn't exist
+  const tempDir = path.join(os.tmpdir(), 'memes');
+  if (!fs.existsSync(tempDir)) {
+    fs.mkdirSync(tempDir, { recursive: true });
+  }
+
+  // Generate a unique filename
+  const timestamp = Date.now();
+  const random = Math.random().toString(36).substring(7);
+  const filename = `meme-${timestamp}-${random}.jpg`;
+  const filePath = path.join(tempDir, filename);
+
+  // Write the file
+  const buffer = await response.buffer();
+  fs.writeFileSync(filePath, buffer);
+
+  return filePath;
+};
+
 module.exports = {
   fetchTemplates,
   searchTemplate,
   getRandomTemplate,
-  buildUrl
+  buildUrl,
+  downloadMeme
 };

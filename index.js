@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { generateMemeUrl } = require('./src/meme-generator');
+const { generateMemeUrl, downloadMeme } = require('./src/meme-generator');
 const { sendToSlack } = require('./src/notification/slack');
 
 /**
@@ -7,21 +7,27 @@ const { sendToSlack } = require('./src/notification/slack');
  * @param {string} prompt - The meme template keyword (e.g., "doge").
  * @param {string[]} texts - Array of text lines.
  * @param {boolean} sendToChannel - Whether to send to the configured Slack channel.
- * @returns {Promise<{url: string, sent: boolean}>}
+ * @returns {Promise<{filePath: string, url: string, sent: boolean}>}
  */
 const executeSkill = async (prompt, texts = [], sendToChannel = false) => {
   try {
     console.log(`[MemeSkill] Generating for: "${prompt}" with texts: [${texts.join(', ')}]...`);
     // Pass individual text arguments to generateMemeUrl
     const memeUrl = await generateMemeUrl(prompt, ...texts);
-    
+
+    // Download the meme to a local file
+    console.log('[MemeSkill] Downloading meme...');
+    const filePath = await downloadMeme(memeUrl);
+    console.log(`[MemeSkill] Saved to: ${filePath}`);
+
     let sent = false;
     if (sendToChannel) {
       console.log('[MemeSkill] Sending to Slack...');
-      sent = await sendToSlack(`Meme: ${prompt} [${texts.join('/')}]`, memeUrl);
+      // Send with minimal text - just the emoji, no extra messages
+      sent = await sendToSlack('😏', filePath);
     }
 
-    return { url: memeUrl, sent };
+    return { filePath, url: memeUrl, sent };
   } catch (error) {
     console.error('[MemeSkill] Error:', error.message);
     throw error;

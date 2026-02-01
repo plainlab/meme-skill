@@ -1,16 +1,16 @@
-const { fetchTemplates, searchTemplate, getRandomTemplate, buildUrl } = require('./core');
+const { fetchTemplates, searchTemplate, getRandomTemplate, buildUrl, downloadMeme } = require('./core');
 
 /**
  * Generate a meme URL based on a prompt and text.
  * Falls back to a random template if the prompt matches nothing.
- * 
+ *
  * @param {string} searchPrompt - The "intent" or keyword (e.g., "smart guy").
  * @param {...string} texts - Variable text lines (top, middle, bottom, etc.).
  * @returns {Promise<string>} - The meme image URL.
  */
 const generateMemeUrl = async (searchPrompt, ...texts) => {
   const templates = await fetchTemplates();
-  
+
   if (templates.length === 0) {
     throw new Error('No templates available from Meme Service.');
   }
@@ -27,5 +27,6 @@ const generateMemeUrl = async (searchPrompt, ...texts) => {
 };
 
 module.exports = {
-  generateMemeUrl
+  generateMemeUrl,
+  downloadMeme
 };
